@@ -32,18 +32,22 @@ int main(int argc, const char *argv[])
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
-    glViewport(0, 0, 800, 600);
+    //opengl 需要进行渲染的大小，前两个参数代表渲染的左下角坐标，debug 过程中未发现前两个参数的效果
+    glViewport(0, 0, 200, 200);
+    //注册回调，我们在改变窗口大小时，调用回调
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     while (!glfwWindowShouldClose(window))
     {
-
         processInput(window);
+        //设置清除缓存的颜色
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
+        //glfwSwapBuffers函数会交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色值的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上。
+        //double buffer 设计，gpu进行渲染的都是在渲染缓存中，在渲染结束后进行swapbuffer操作
+        //联想到Android里的 eglSwapBuffers
         glfwSwapBuffers(window);
+        //键盘，鼠标等事件
         glfwPollEvents();
     }
 
